@@ -16,6 +16,8 @@
 #include "polyscope/view.h"
 #include "polyscope/volume_mesh.h"
 
+#include "utils.h"
+
 namespace py = pybind11;
 namespace ps = polyscope;
 
@@ -111,7 +113,7 @@ PYBIND11_MODULE(polyscope_bindings, m) {
   m.def("set_bounding_box", [](glm::vec3 low, glm::vec3 high) { ps::state::boundingBox = std::tuple<glm::vec3, glm::vec3>(low, high); });
   m.def("get_bounding_box", []() { return ps::state::boundingBox; });
 
-  // === Camera controls
+  // === Camera controls & parameters
   m.def("reset_camera_to_home_view", ps::view::resetCameraToHomeView);
   m.def("look_at", [](glm::vec3 location, glm::vec3 target, bool flyTo) { 
       ps::view::lookAt(location, target, flyTo); 
@@ -119,7 +121,17 @@ PYBIND11_MODULE(polyscope_bindings, m) {
   m.def("look_at_dir", [](glm::vec3 location, glm::vec3 target, glm::vec3 upDir, bool flyTo) { 
       ps::view::lookAt(location, target, upDir, flyTo); 
   });
+  m.def("get_camera_world_position", []() {return glm2eigen(ps::view::getCameraWorldPosition());});
+  m.def("get_camera_frame", []() {
+      glm::vec3 look, up, right;
+      ps::view::getCameraFrame(look, up, right);
+      return std::make_tuple(glm2eigen(look), glm2eigen(up), glm2eigen(right));
+  });
+  m.def("get_view_matrix", []() {return glm2eigen(ps::view::getCameraViewMatrix());});
+  m.def("get_projection_matrix", []() {return glm2eigen(ps::view::getCameraPerspectiveMatrix());});
   m.def("set_view_projection_mode", [](ps::ProjectionMode x) { ps::view::projectionMode = x; });
+  m.def("set_field_of_view", [](double f) { return ps::view::fov = f; });
+  m.def("get_field_of_view", []() { return ps::view::fov; });
   
   // === Messages
   m.def("info", ps::info, "Send an info message");

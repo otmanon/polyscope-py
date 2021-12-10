@@ -112,7 +112,7 @@ def get_bounding_box():
     low, high = psb.get_bounding_box()
     return np.array(low.as_tuple()), np.array(high.as_tuple())
 
-### Camera controls
+### Camera controls & parameters
 
 def reset_camera_to_home_view():
     psb.reset_camera_to_home_view()
@@ -122,6 +122,18 @@ def look_at(camera_location, target, fly_to=False):
 
 def look_at_dir(camera_location, target, up_dir, fly_to=False):
     psb.look_at_dir(glm3(camera_location), glm3(target), glm3(up_dir), fly_to)
+
+def get_camera_world_position():
+    return psb.get_camera_world_position();
+
+def get_camera_frame():
+    return psb.get_camera_frame();
+
+def get_view_matrix():
+    return psb.get_view_matrix();
+
+def get_projection_matrix():
+    return psb.get_projection_matrix();
 
 def set_view_projection_mode(s):
     psb.set_view_projection_mode(str_to_projection_mode(s))

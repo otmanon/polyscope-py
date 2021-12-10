@@ -107,6 +107,26 @@ class TestCore(unittest.TestCase):
         
         ps.show(3)
     
+    def test_camera_getters(self):
+
+        ps.reset_camera_to_home_view()
+
+        pos = ps.get_camera_world_position()
+        self.assertEqual(pos.shape, (3,))
+
+        look, up, right = ps.get_camera_frame()
+        self.assertEqual(look.shape, (3,))
+        self.assertEqual(up.shape, (3,))
+        self.assertEqual(right.shape, (3,))
+
+        mat_view = ps.get_view_matrix()
+        self.assertEqual(mat_view.shape, (4,4))
+
+        mat_proj = ps.get_projection_matrix()
+        self.assertEqual(mat_proj.shape, (4,4))
+        
+        ps.show(3)
+    
     def test_ground_options(self):
 
         ps.set_ground_plane_mode("none")
