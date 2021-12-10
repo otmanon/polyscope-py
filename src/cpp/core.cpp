@@ -29,6 +29,8 @@ void bind_surface_mesh(py::module& m);
 void bind_point_cloud(py::module& m);
 void bind_curve_network(py::module& m);
 void bind_volume_mesh(py::module& m);
+void bind_volume_grid(py::module& m);
+void bind_floating_quantities(py::module& m);
 void bind_imgui(py::module& m);
 
 // Signal handler (makes ctrl-c work, etc)
@@ -210,6 +212,8 @@ PYBIND11_MODULE(polyscope_bindings, m) {
   m.def("add_scene_slice_plane", ps::addSceneSlicePlane, "add a slice plane", py::return_value_policy::reference);
   m.def("remove_last_scene_slice_plane", ps::removeLastSceneSlicePlane, "remove last scene plane");
   
+
+  
   // === Enums
   
   py::enum_<ps::view::NavigateStyle>(m, "NavigateStyle")
@@ -301,6 +305,8 @@ PYBIND11_MODULE(polyscope_bindings, m) {
   bind_point_cloud(m);
   bind_curve_network(m);
   bind_volume_mesh(m);
+  bind_volume_grid(m);
+  bind_floating_quantities(m);
   bind_imgui(m);
 
 }

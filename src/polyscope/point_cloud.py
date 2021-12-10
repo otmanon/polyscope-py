@@ -44,9 +44,9 @@ class PointCloud:
     def remove_all_quantities(self):
         '''Remove all quantities on the structure'''
         self.bound_cloud.remove_all_quantities()
-    def remove_quantity(self, name):
+    def remove_quantity(self, name, error_if_absent=False):
         '''Remove a single quantity on the structure'''
-        self.bound_cloud.remove_quantity(name)
+        self.bound_cloud.remove_quantity(name, error_if_absent)
 
     # Enable/disable
     def set_enabled(self, val=True):

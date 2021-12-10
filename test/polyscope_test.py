@@ -1499,6 +1499,51 @@ class TestVolumeMesh(unittest.TestCase):
         
         ps.remove_all_structures()
 
+class TestFloatingQuantities(unittest.TestCase):
+
+    def test_floating_scalar_image(self):
+    
+        # Basic add
+        ps.add_floating_scalar_image("test scalar", (500,600), np.random.rand(500,600), enabled=True)
+        ps.add_floating_scalar_image("test scalar2", (500,600), np.random.rand(500*600), enabled=True)
+        ps.show(3)
+
+        # Remove
+        ps.remove_floating_scalar_image("test scalar")
+        ps.remove_floating_quantity("test scalar2")
+
+        # Fullscreen show
+        ps.add_floating_scalar_image("test scalar", (500,600), np.random.rand(500,600), enabled=True, show_fullscreen=True)
+        ps.show(3)
+        ps.remove_floating_scalar_image("test scalar")
+
+
+        # Other various options
+        ps.add_floating_scalar_image("test scalar", (500,600), np.random.rand(500,600), show_fullscreen=True, cmap='reds', vminmax=(-1,2), datatype='symmetric')
+        ps.show(3)
+
+
+        ps.remove_all_floating_quantities()
+    
+
+    def test_floating_color_image(self):
+    
+        # Basic add
+        ps.add_floating_color_image("test color", (500,600), np.random.rand(500,600,3), enabled=True)
+        ps.add_floating_color_image("test color2", (500,600), np.random.rand(500*600,3), enabled=True)
+        ps.show(3)
+
+        # Remove
+        ps.remove_floating_color_image("test color")
+        ps.remove_floating_quantity("test color2")
+
+        # Fullscreen show
+        ps.add_floating_color_image("test color", (500,600), np.random.rand(500,600,3), enabled=True, show_fullscreen=True)
+        ps.show(3)
+        
+        ps.remove_all_floating_quantities()
+
+
 if __name__ == '__main__':
 
     # Parse out test-specific args (this is kinda poor design, but very useful)
