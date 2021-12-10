@@ -110,7 +110,7 @@ class TestCore(unittest.TestCase):
     def test_camera_getters(self):
 
         ps.reset_camera_to_home_view()
-
+        
         pos = ps.get_camera_world_position()
         self.assertEqual(pos.shape, (3,))
 
@@ -126,6 +126,13 @@ class TestCore(unittest.TestCase):
         self.assertEqual(mat_proj.shape, (4,4))
         
         ps.show(3)
+    
+    def test_fov(self):
+
+        ps.set_field_of_view(33.)
+        self.assertEqual(ps.get_field_of_view(), 33.)
+        
+        ps.reset_camera_to_home_view()
     
     def test_ground_options(self):
 

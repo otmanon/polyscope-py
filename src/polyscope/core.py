@@ -123,6 +123,9 @@ def look_at(camera_location, target, fly_to=False):
 def look_at_dir(camera_location, target, up_dir, fly_to=False):
     psb.look_at_dir(glm3(camera_location), glm3(target), glm3(up_dir), fly_to)
 
+def set_view_projection_mode(s):
+    psb.set_view_projection_mode(str_to_projection_mode(s))
+
 def get_camera_world_position():
     return psb.get_camera_world_position();
 
@@ -135,8 +138,13 @@ def get_view_matrix():
 def get_projection_matrix():
     return psb.get_projection_matrix();
 
-def set_view_projection_mode(s):
-    psb.set_view_projection_mode(str_to_projection_mode(s))
+def set_field_of_view(fov_deg):
+    return psb.set_field_of_view(fov_deg);
+
+def get_field_of_view():
+    # in degrees
+    return psb.get_field_of_view();
+
 
 ### Messages
 
