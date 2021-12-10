@@ -1543,6 +1543,74 @@ class TestFloatingQuantities(unittest.TestCase):
         
         ps.remove_all_floating_quantities()
 
+class TestVolumeGrid(unittest.TestCase):
+
+    def test_add_remove(self):
+   
+        # add
+        vol1 = ps.register_volume_grid("grid1", 64, [-2, -3, -4], [1, 2, 3])
+        vol2 = ps.register_volume_grid("grid2", (64,70,65), [-1, -1, -1], [1, 1, 1])
+
+        # remove by name
+        ps.remove_volume_grid("grid1")
+        # remove by ref
+        vol2.remove()
+
+        # get by name
+        ps.register_volume_grid("grid3", 64, [-2, -3, -4], [1, 2, 3])
+        p = ps.get_volume_grid("grid3") # should be wrapped instance, not underlying PSB instance
+        self.assertTrue(isinstance(p, ps.VolumeGrid))
+
+        ps.remove_all_structures()
+    
+    def test_render(self):
+        
+        ps.register_volume_grid("grid1", 64, [-2, -3, -4], [1, 2, 3])
+        # doesn't actually do anything
+        ps.show(3)
+        ps.remove_all_structures()
+
+    def test_scalar_quantity(self):
+
+        grid = ps.register_volume_grid("grid1", 64, [-2, -3, -4], [1, 2, 3])
+
+        # Add by array 
+        grid.add_scalar_quantity("rand scalar", np.random.rand(64**3), enabled=True)
+        ps.show(3)
+
+        # Add by callable
+        def f_single(x,y,z):
+            return x**2 + y**2 + z**2 - 1
+        grid.add_scalar_quantity_from_callable("single func", f_single, enabled=True)
+        
+        # Add by batch callable
+        def f_batch(x):
+            out = np.linalg.norm(x,axis=1) - 1.
+            return out
+        grid.add_scalar_quantity_from_batch_callable("batch func", f_batch, enabled=True)
+
+        ps.show(3)
+        # ps.remove_all_structures()
+
+        # Test options
+        kwargs = {
+            'enabled' : True, 
+            'datatype' : "symmetric", 
+            'vminmax' : (-1.2, 1.4), 
+            'cmap' : 'reds',
+            'point_viz_enabled' : True,
+            'isosurface_viz_enabled' : True,
+            'isosurface_level' : 0.2,
+            'isosurface_color' : (0.2, 0.6, 0.8)
+        }
+
+        grid.add_scalar_quantity("rand scalar", np.random.rand(64**3), **kwargs)
+        grid.add_scalar_quantity_from_callable("single func", f_single, **kwargs)
+        grid.add_scalar_quantity_from_batch_callable("batch func", f_batch, **kwargs)
+
+        ps.show(3)
+        ps.remove_all_structures()
+        
 
 if __name__ == '__main__':
 
