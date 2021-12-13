@@ -75,6 +75,17 @@ class TestCore(unittest.TestCase):
         # Make sure clearing twice is ok
         ps.clear_user_callback()
     
+    def test_window_options(self):
+
+        ps.set_window_size(1200, 1024)
+        width, height = ps.get_window_size()
+        self.assertEqual(width, 1200)
+        self.assertEqual(height, 1024)
+        
+        width, height = ps.get_buffer_size()
+        # pretty sure these ^ are platform-dependent
+
+    
     def test_view_options(self):
 
         ps.set_navigation_style("turntable")

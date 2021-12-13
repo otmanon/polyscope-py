@@ -111,6 +111,18 @@ def set_bounding_box(low, high):
 def get_bounding_box():
     low, high = psb.get_bounding_box()
     return np.array(low.as_tuple()), np.array(high.as_tuple())
+  
+
+### Window management
+
+def set_window_size(width, height):
+    psb.set_window_size(width, height)
+
+def get_window_size():
+    return psb.get_window_size()
+
+def get_buffer_size():
+    return psb.get_buffer_size()
 
 ### Camera controls & parameters
 

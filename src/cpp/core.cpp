@@ -112,6 +112,12 @@ PYBIND11_MODULE(polyscope_bindings, m) {
   m.def("get_length_scale", []() { return ps::state::lengthScale; });
   m.def("set_bounding_box", [](glm::vec3 low, glm::vec3 high) { ps::state::boundingBox = std::tuple<glm::vec3, glm::vec3>(low, high); });
   m.def("get_bounding_box", []() { return ps::state::boundingBox; });
+  
+  // === Window management
+  m.def("set_window_size", ps::view::setWindowSize);
+  m.def("get_window_size", []() { return std::make_tuple(ps::view::windowWidth, ps::view::windowHeight); });
+  m.def("get_buffer_size", []() { return std::make_tuple(ps::view::bufferWidth, ps::view::bufferHeight); });
+
 
   // === Camera controls & parameters
   m.def("reset_camera_to_home_view", ps::view::resetCameraToHomeView);
