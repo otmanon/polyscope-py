@@ -3,7 +3,7 @@
 	url = https://github.com/pybind/pybind11.git
 [submodule "deps/polyscope"]
 	path = deps/polyscope
-	url = https://github.com/otmanon/polyscope.git
+	url = https://github.com/nmwsharp/polyscope.git
 [submodule "deps/eigen"]
 	path = deps/eigen
 	url = https://gitlab.com/libeigen/eigen.git
