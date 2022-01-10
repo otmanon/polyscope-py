@@ -1493,7 +1493,6 @@ void bind_imgui_methods(py::module& m) {
         py::arg("button"),
         py::arg("lock_threshold") = -1.f
     );
-    m.def("GetMouseDragDelta", [](ImGuiMouseButton button) { return from_vec2(ImGui::GetMouseDragDelta(button)); });
     m.def("ResetMouseDragDelta", [](ImGuiMouseButton button) { ImGui::ResetMouseDragDelta(button); }, py::arg("button"));
     m.def("GetMouseCursor", []() { return ImGui::GetMouseCursor(); });
     m.def("SetMouseCursor", [](ImGuiMouseCursor cursor_type) { ImGui::SetMouseCursor(cursor_type); }, py::arg("cursor_type"));

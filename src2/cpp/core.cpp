@@ -118,49 +118,6 @@ PYBIND11_MODULE(polyscope_bindings, m) {
       ps::view::lookAt(location, target, upDir, flyTo); 
   });
   m.def("set_view_projection_mode", [](ps::ProjectionMode x) { ps::view::projectionMode = x; });
-  m.def("set_default_mouse_interaction", [](bool doDefaultMouseInteraction) {  ps::state::doDefaultMouseInteraction = doDefaultMouseInteraction; });
-  m.def("screen_to_world_ray", [](float screen_x, float screen_y){ 
-      glm::vec2 screenCoords = glm::vec2(screen_x, screen_y);
-      glm::vec3 pos = ps::view::screenCoordsToWorldRay(screenCoords);
-      std::vector<float> pos_list{pos[0], pos[1], pos[2]};
-      return pos_list;});
-  //inefficient, copies over entries but not sure what's a better way for now
-  m.def("get_view_matrix", []() { 
-      glm::mat4 m = ps::view::getCameraViewMatrix(); 
-      std::vector<float> m_list{ m[0][0], m[0][1], m[0][2], m[0][3],
-                                m[1][0], m[1][1], m[1][2], m[1][3],
-                                m[2][0], m[2][1], m[2][2], m[2][3],
-                                m[3][0], m[3][1], m[3][2], m[3][3]};
-      return m_list;
-      });
-
-  m.def("get_proj_matrix", []() { 
-      glm::mat4 m = ps::view::getCameraPerspectiveMatrix();
-      std::vector<float> m_list{ m[0][0], m[0][1], m[0][2], m[0][3],
-                                m[1][0], m[1][1], m[1][2], m[1][3],
-                                m[2][0], m[2][1], m[2][2], m[2][3],
-                                m[3][0], m[3][1], m[3][2], m[3][3]};
-      return m_list;
-      });
-
-  m.def("get_viewport_vector", []() {
-      std::vector<int> viewport{0, 0, ps::view::windowWidth, ps::view::windowHeight};
-      return viewport;
-  });
-
-  
-  m.def("screen_to_world_pos", [](float screenCoords_x, float screenCoords_y) {
-      glm::mat4 view = ps::view::getCameraViewMatrix();
-      glm::mat4 proj = ps::view::getCameraPerspectiveMatrix();
-      glm::vec4 viewport = {0., 0., ps::view::windowWidth, ps::view::windowHeight};
-
-      glm::vec3 screenPos3{screenCoords_x, ps::view::windowHeight - screenCoords_y, 0.};
-      glm::vec3 worldPos = glm::unProject(screenPos3, view, proj, viewport);
-      std::vector<float> p{worldPos[0], worldPos[1], worldPos[2]};
-      return p;
-  });
-  
-  
   
   // === Messages
   m.def("info", ps::info, "Send an info message");
@@ -253,32 +210,6 @@ PYBIND11_MODULE(polyscope_bindings, m) {
   m.def("add_scene_slice_plane", ps::addSceneSlicePlane, "add a slice plane", py::return_value_policy::reference);
   m.def("remove_last_scene_slice_plane", ps::removeLastSceneSlicePlane, "remove last scene plane");
   
-  // gizmos
-   /*m.def("add_transformation_gizmo", []( std::string gizmo_name, std::vector<float> t) { 
-        glm::mat4 m = glm::mat4(t[0], t[1], t[2], t[3],
-                                t[4], t[5], t[6], t[7],
-                                t[8], t[9], t[10], t[11],
-                                t[12], t[13], t[14], t[15]);
-        ps::PersistentValue<glm::mat4> objectTransform("transform", g,);
-        ps::TransformationGizmo gizmo(gizmo_name, objectTransform.get(), &objectTransform);
-        gizmo.enabled = true;
-        ps::state::widgets.insert(&gizmo);
-        ps::state::gizmos[gizmo_name] = &gizmo;
-
-      });
-
-   //TODO: go through gizmo map first to make sure the key exists
-      m.def("get_gizmo_transform", []( std::string gizmo_name) { 
-        glm::mat4 m = state::gizmos[gizmo_name]->T;
-       glm::mat4 m = ps::view::getCameraPerspectiveMatrix();
-        std::vector<float> m_list{ m[0][0], m[0][1], m[0][2], m[0][3],
-                                m[1][0], m[1][1], m[1][2], m[1][3],
-                                m[2][0], m[2][1], m[2][2], m[2][3],
-                                m[3][0], m[3][1], m[3][2], m[3][3]};
-      return m_list;
-
-      });
-  */
   // === Enums
   
   py::enum_<ps::view::NavigateStyle>(m, "NavigateStyle")
@@ -358,9 +289,13 @@ PYBIND11_MODULE(polyscope_bindings, m) {
         return std::tuple<float, float, float>(x[0], x[1], x[2]);
         });
   
+  py::class_<glm::vec4>(m, "glm_vec4").
+    def(py::init<float, float, float, float>())
+   .def("as_tuple",
+        [](const glm::vec4& x) {
+        return std::tuple<float, float, float, float>(x[0], x[1], x[2], x[3]);
+        });
 
-
-   
   // === Bind structures defined in other files
   bind_surface_mesh(m);
   bind_point_cloud(m);

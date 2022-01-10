@@ -126,29 +126,6 @@ def look_at_dir(camera_location, target, up_dir, fly_to=False):
 def set_view_projection_mode(s):
     psb.set_view_projection_mode(str_to_projection_mode(s))
 
-def get_view_matrix():
-    view = np.array(psb.get_view_matrix()).reshape(4, 4)
-    return view
-
-def get_proj_matrix():
-    proj = np.array(psb.get_proj_matrix()).reshape(4, 4)
-    return proj
-
-def get_viewport_vector():
-    viewport = np.array(psb.get_viewport_vector()).astype(np.double)
-    return viewport
-
-def screen_to_world_pos(screen_x, screen_y):
-    pos = np.array(psb.screen_to_world_pos(screen_x, screen_y))
-    return pos
-
-def screen_to_world_ray(screen_x, screen_y):
-    return np.array(psb.screen_to_world_ray(screen_x, screen_y))
-
-def set_default_mouse_interaction(do_default_mouse_interaction):
-    psb.set_default_mouse_interaction(do_default_mouse_interaction)
-
-
 ### Messages
 
 def info(message):
@@ -258,7 +235,6 @@ def glm3(vals):
     return psb.glm_vec3(vals[0], vals[1], vals[2])
 def glm4(vals):
     return psb.glm_vec4(vals[0], vals[1], vals[2], vals[3])
-
 
 ### Materials
 
